@@ -1,0 +1,113 @@
+<div  class="font-bold" styleClass="font-size: 20px">
+    <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+        'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <p-panel header="Liste des bordereaux">
+            
+        <div class="px-1 py-1">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-info mr-2" (click)="openNew()"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="bordereaux" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['code']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées" [(selection)]="selectedBordereaux" selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0"></h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Chercher..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="id">ID <p-sortIcon field="code"></p-sortIcon></th>
+                        <th pSortableColumn="code">Référence bordereau <p-sortIcon field="code"></p-sortIcon></th>
+                        <th pSortableColumn="dateGeneration">Date génération <p-sortIcon field="dateGeneration"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-bordereau>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="bordereau"></p-tableCheckbox>
+                        </td>
+                        <td ><span class="p-column-title">ID</span>
+                            {{bordereau.id}}
+                        </td>
+                        <td >
+                            <span class="p-column-title">Référence bordereau</span>
+                            {{bordereau.code}}
+                        </td>
+                        <td >
+                            <span class="p-column-title">Date génération</span>
+                            {{bordereau.dateGeneration}}
+                        </td>
+                      
+                        <td>
+                            <div class="flex">
+                               <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="delete(bordereau)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-panel>
+
+        <p-dialog [(visible)]="bordereauDialog" [style]="{width: '500px'}" header="Informations" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                
+                <div class="field">
+                    <label for="code" class="font-bold">Référence du bordereau : </label>
+                    <input type="text" pInputText id="code" [(ngModel)]="bordereau.code" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bordereau.code}"/>
+                    <small style="color:red" *ngIf="submitted && !bordereau.code">Ce champs est requis.</small>
+                </div>
+                
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-warning" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-primary" (click)="save()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteBordereauDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="bordereau">Etes-vous sûr que vous voulez supprimer <b>{{bordereau.code}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-success" label="Non" (click)="deleteBordereauDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-danger"  label="Oui" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteBordereauxDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Voulez-vous vraiment supprimer les lignes sélectionnées?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-success" label="Non" (click)="deleteBordereauxDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-danger" label="Oui" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

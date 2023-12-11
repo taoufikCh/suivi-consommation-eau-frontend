@@ -1,0 +1,128 @@
+<div  class="font-bold" styleClass="font-size: 20px">
+    <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+        'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+
+
+<div class="grid">
+	<div class="col-12">
+
+            <p-panel header="{{ pageTitle }}">
+                
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="code" class="font-bold">Identifiant : </label>
+                        <input type="text" pInputText id="code" style="border-radius: 25px;"  [(ngModel)]="local.code" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !local.code}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !local.code">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="designation" class="font-bold">Désignation : </label>
+                        <input type="text" pInputText id="designation" style="border-radius: 25px;" [(ngModel)]="local.designation" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !local.designation}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !local.designation">Ce champs est requis.</small>
+                    </div>
+                   <!-- <div class="field col-12 md:col-6">
+                        <label htmlFor="image" class="font-bold">Image : </label>
+                        <input type="file" pInputText id="image" #fileInput (change)="onFileInput(fileInput.files)" style="border-radius: 25px;" [(ngModel)]="file" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !file}"/>
+                        <input type="file" (change)="onFileSelected($event)" #fileInput [(ngModel)]="file" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !file}"/>
+                        
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !file">Ce champs est requis.</small>
+                    </div>-->
+                    
+                  
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="district" class="font-bold">District :  </label>
+                        <p-dropdown [options]="districts"  [(ngModel)]="district" optionLabel="libille" [filter]="true"
+                        (onChange)="onChangeDistrict(district)" filterBy="libille" appendTo="body" [showClear]="true" placeholder="Choisissez un district" [ngClass]="{'ng-invalid ng-dirty' : submitted && !district}">
+                            <ng-template let-district pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ district.libille }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !district">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="region" class="font-bold">Région :  </label>
+                        <p-dropdown [options]="regions"  [(ngModel)]="region" optionLabel="libille" (onChange)="onChangeRegion(region)" [showClear]="true" [filter]="true" filterBy="libille" appendTo="body" placeholder="Choisissez une région" [ngClass]="{'ng-invalid ng-dirty' : submitted && !region}">
+                            <ng-template let-region pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ region.libille }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !region">Ce champs est requis.</small>
+                    </div>
+                   
+                   
+                    <div class="field col-12 md:col-6">
+                        <label for="nature_exercise" class="font-bold">Nature d'exercice :  </label>
+                        <p-dropdown [options]="natureExercices"  [(ngModel)]="local.nature_exercise" optionLabel="designation" [filter]="true" filterBy="designation" appendTo="body" [showClear]="true" placeholder="Choisissez la nature " [ngClass]="{'ng-invalid ng-dirty' : submitted && !local.nature_exercise}">
+                            <ng-template let-natureExercice pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ natureExercice.designation }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !local.nature_exercise">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="type_local" class="font-bold">Type local :  </label>
+                        <p-dropdown [options]="typeLocaux" [(ngModel)]="local.type_local" optionLabel="designation" [filter]="true" filterBy="designation" appendTo="body" [showClear]="true" placeholder="Choisissez le type local" [ngClass]="{'ng-invalid ng-dirty' : submitted && !local.type_local}">
+                            <ng-template let-typeLocal pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ typeLocal.designation }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !local.type_local">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="etat" class="font-bold">Etat :  </label>
+                        <p-dropdown [options]="modesLabels" [(ngModel)]="selectedEtat" (onChange)="onChangeEtat(selectedEtat)" appendTo="body" [showClear]="true" placeholder="Choisissez un" [ngClass]="{'ng-invalid ng-dirty' : submitted && !selectedEtat}">
+                            <ng-template let-label pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ label }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+    
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !selectedEtat">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="adresse" class="font-bold">Adresse :</label>
+                        <textarea id="adresse" style="border-radius: 25px;" pInputTextarea [(ngModel)]="local.adresse" required rows="1" cols="20"></textarea>
+                    </div>
+                   
+                    
+                    <div class="field col-12 "  #mapContainer>
+                        <label class="font-bold">Localisation géographique :</label>
+                        <google-map
+                            height="400px"
+                            [width]="mapContainer.offsetWidth" 
+                            [zoom]="zoom"
+                            [center]="center"
+                            [options]="options" (mapClick)="click($event)">
+                            <map-marker
+                                *ngFor="let marker of markers"
+                                    [position]="marker.position"
+                                    [options]="marker.options"
+                                >
+                                </map-marker>
+                        </google-map>
+                    </div>
+                    
+                    <div class=" col-12 flex justify-content-center ">
+                        <button pButton pRipple label="Enregistrer" icon="pi pi-save" style="border-radius: 25px; width: 200px;" severity="primary" (click)="save()"></button>
+                    </div>
+                    
+                </div>
+                
+            </p-panel>
+                    
+            
+			
+			
+
+	</div>
+</div>

@@ -1,0 +1,103 @@
+
+<div  class="font-bold" styleClass="font-size: 20px">
+    <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+        'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+
+
+<div class="grid">
+	<div class="col-12">
+
+            <p-panel header="{{ pageTitle }}">
+               
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label for="compteur" class="font-bold">Compteur :  </label>
+                        <p-dropdown [options]="compteurs"  [(ngModel)]="compteur" optionLabel="refCompteur" (onChange)="onChangeCompteur(compteur)" [showClear]="true" [filter]="true" filterBy="refCompteur" 
+                        appendTo="body" placeholder="Choisissez le compteur" id="compteur" [ngClass]="{'ng-invalid ng-dirty' : submitted && !compteur}">
+                            <ng-template let-compteur pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ compteur.refCompteur}} </div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small style="color:red;" *ngIf="submitted && !compteur">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="reffacture" class="font-bold">Référence de facture : </label>
+                        <input type="text" pInputText id="refFacture"   [(ngModel)]="consommation.refFacture" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !consommation.refFacture}"/>
+                        <small style="color:red;" *ngIf="submitted && !consommation.refFacture">Ce champs est requis.</small>
+                    </div>
+                   
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="dateDebut" class="font-bold">Date début : </label>
+                        <p-calendar  [style]="inputStyle" dateFormat="dd-mm-yy" id="dateDebut" [maxDate]="maxDate"   [(ngModel)]="dateDebut" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !dateDebut}"></p-calendar>
+                        <small style="color:red;" *ngIf="submitted && !dateDebut">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="dateFin" class="font-bold">Date fin : </label>
+                        <p-calendar  [style]="inputStyle" dateFormat="dd-mm-yy" id="dateFin"    [(ngModel)]="dateFin" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !dateFin}"></p-calendar>
+                        <small style="color:red;" *ngIf="submitted && !dateFin">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="ancienIndex" class="font-bold">Ancien index : </label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="1" id="ancienIndex"[(ngModel)]="consommation.ancienIndex"  required [ngClass]="{'ng-invalid ng-dirty' : submitted && !consommation.ancienIndex}">
+                        </p-inputNumber>
+                        <small style="color:red;" *ngIf="submitted && !consommation.ancienIndex">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="nouveauIndex" class="font-bold">Nouveau index : </label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="1" id="nouveauIndex"[(ngModel)]="consommation.nouveauIndex"  required [ngClass]="{'ng-invalid ng-dirty' : submitted && !consommation.nouveauIndex}">
+                        </p-inputNumber>
+                        <small style="color:red;" *ngIf="submitted && !consommation.nouveauIndex">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="bordereau" class="font-bold">Bordereau :  </label>
+                        <p-dropdown [options]="bordereaux"  [(ngModel)]="consommation.bordereau" optionLabel="code" [showClear]="true" [filter]="true" filterBy="code" 
+                        appendTo="body" placeholder="Choisissez le bordereau" id="bordereau" [ngClass]="{'ng-invalid ng-dirty' : submitted && !consommation.bordereau}">
+                            <ng-template let-bordereau pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ bordereau.code}} </div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small style="color:red;" *ngIf="submitted && !consommation.bordereau">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="montant" class="font-bold">Montant : </label>
+                        <input type="text" pInputText id="montant" [(ngModel)]="consommation.montant" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !consommation.montant}"/>
+                        <small style="color:red;" *ngIf="submitted && !consommation.montant">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="etat" class="font-bold">Etat :  </label>
+                        <div class="grid formgrid"> 
+                           
+                            <div class="col-12 md:col-4">
+                                <div class="field-radiobutton">
+                                    <p-radioButton name="etatFacture" [value]="true" [(ngModel)]="etat" id="paye"></p-radioButton>
+                                    <label for="actif">paye</label>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field-radiobutton">
+                                    <p-radioButton name="etatFacture" [value]="false" [(ngModel)]="etat" id="nonPaye"></p-radioButton>
+                                    <label for="nonPaye">non payé</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field col-12 flex justify-content-center ">
+                        <button pButton pRipple label="Enregistrer" icon="pi pi-save" style="border-radius: 25px; width: 200px;" severity="primary" (click)="save()"></button>
+                    </div>
+                    
+                </div>
+                
+            </p-panel>
+                    
+            
+			
+			
+
+	</div>
+</div>

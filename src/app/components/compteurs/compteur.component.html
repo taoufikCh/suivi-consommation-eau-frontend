@@ -1,0 +1,169 @@
+<div class="loading-indicator" *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<div  class="font-bold" styleClass="font-size: 20px">
+    <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+        'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <p-panel header="Liste des compteurs">
+            
+        <div class="px-1 py-1">
+            
+            <p-toolbar styleClass="mb-2 ml-1 mp-1 mr-1">
+                
+                <div class="field col-12 md:col-3 grid">
+                    <label for="district" class="font-bold">District :  </label>
+                    <p-dropdown [options]="districts"  [(ngModel)]="district" optionLabel="libille" [filter]="true"
+                    (onChange)="onChangeDistrict(district)" filterBy="libille" appendTo="body" [showClear]="true" placeholder="Choisissez un district">
+                        <ng-template let-district pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ district.libille }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                
+                <div class="field col-12 md:col-3 grid">
+                    <label for="region" class="font-bold">Région :  </label>
+                    <p-dropdown [options]="regions"  [(ngModel)]="region" optionLabel="libille"  [showClear]="true" [filter]="true" filterBy="libille" appendTo="body" placeholder="Choisissez une région" >
+                        <ng-template let-region pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ region.libille }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+               
+               
+                <div class="field col-12 md:col-3 grid">
+                    <label for="nature_exercise" class="font-bold">Nature d'exercice :  </label>
+                    <p-dropdown [options]="natureExercices"  [(ngModel)]="natureExercice" optionLabel="designation"  appendTo="body" [showClear]="true" placeholder="Choisissez la nature " >
+                        <ng-template let-natureExercice pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ natureExercice.designation }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-3 grid">
+                    <label for="typeLocal" class="font-bold">Type local :  </label>
+                    <p-dropdown [options]="typeLocaux" [(ngModel)]="typeLocal" optionLabel="designation"  appendTo="body" [showClear]="true" placeholder="Choisissez le type local" >
+                        <ng-template let-typeLocal pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ typeLocal.designation }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Ajouter" icon="pi pi-plus-circle" class="p-button-info mr-2" (click)="compteurForms()"></button>
+                        
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Filtrer " icon="pi pi-eye" class="p-button-primary  mr-3" (click)="handleFiltering()" ></button>
+                    <button pButton pRipple label="Réinitialiser " icon="pi pi-replay" class="p-button-danger  mr-3" (click)="resetFilter()" ></button>
+                    <button pButton pRipple label="Exporter PDF" icon="pi pi-download" class="p-button-success  mr-3" (click)="exportToPdf()" ></button>
+                    <button pButton pRipple label="Exporter CSV" icon="pi pi-download" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="compteurs" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
+            [globalFilterFields]="['refContrat','refCompteur','maxConsommation','dateInstallation','localID','etat','uniteMesure']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} entrées" [(selection)]="selectedCompteurs" selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        
+                        <button pButton pRipple label="Supprimer" icon="pi pi-minus-circle" class="p-button-danger m-0" (click)="deleteSelectedCompteurs()" [disabled]="!selectedCompteurs || !selectedCompteurs.length"></button>
+                     
+                          
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Chercher..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                         <!--<th pSortableColumn="image">Image </th> -->
+                        <th pSortableColumn="refCompteur">Réf Compteur </th>
+                        <th pSortableColumn="refContrat">Réf Contrat </th>
+                        <th pSortableColumn="dateInstallation">Date Installat° <p-sortIcon field="dateInstallation"></p-sortIcon></th>
+                        <th pSortableColumn="localID">Local <p-sortIcon field="localID"></p-sortIcon></th>
+                        <!--<th pSortableColumn="uniteMesure">Unité Mesure </th> -->
+                        <th pSortableColumn="etatCompteur">Etat </th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-compteur>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="compteur"></p-tableCheckbox>
+                        </td>
+                       <!-- <td style="min-width:10rem;"><span class="p-column-title">Image</span>
+                            {{compteur.image}}
+                        </td>-->
+                        <td style="min-width:10rem;">
+                            {{compteur.refCompteur}}
+                        </td>
+                        <td style="min-width:10rem;">
+                            {{compteur.refContrat}}
+                        </td>
+                        <td style="min-width:13rem;">
+                            {{compteur.dateInstallation}}
+                        </td>                      
+                        <td style="min-width:8rem;">
+                            {{ getLocalName(compteur.localID) }}
+                        </td>
+                        <!--
+                        <td style="min-width:10rem;">
+                            mètre cube
+                        </td>-->
+                        <td style="min-width:10rem;">                        
+                            <p-tag *ngIf="compteur.etatCompteur==true" severity="success" value=" Actif" [rounded]="true"></p-tag>
+                            <p-tag *ngIf="compteur.etatCompteur==false" severity="danger" value=" Inactif" [rounded]="true"></p-tag>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCompteur(compteur)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2" (click)="delete(compteur)"></button>
+                               <!-- <button pButton pRipple icon="pi pi-chart-bar" class="p-button-rounded p-button-info mr-2" ></button>
+                                <button pButton pRipple icon="pi pi-file" class="p-button-rounded p-button-warning" ></button>-->
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-panel>
+
+        
+        <p-dialog [(visible)]="deleteCompteurDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="compteur">Etes-vous sûr que vous voulez supprimer <b>{{compteur.refCompteur}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-danger" label="Non" (click)="deleteCompteurDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-success"  label="Oui" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteCompteursDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Voulez-vous vraiment supprimer les lignes sélectionnées?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-success" label="Non" (click)="deleteCompteursDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-danger" label="Oui" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+
+<div class="loading-indicator" *ngIf="loading">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<div  class="font-bold" styleClass="font-size: 20px">
+  <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+      'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+<div class="card justify-content-center">
+
+    <google-map
+    height="500px"
+    width="1000px"
+    [zoom]="zoom"
+    [center]="center"
+    [options]="options" (mapClick)="click($event)"
+  >
+<map-marker
+#somemarker="mapMarker" 
+    *ngFor="let marker of markers"
+    [position]="marker.position"
+    [label]="marker.label"
+    [title]="marker.title"
+    [options]="marker.options"
+    (mapClick)="openInfo(somemarker, marker.info, marker.local)"
+    >
+    </map-marker>
+    <map-info-window>
+      <div [innerHTML]="infoContent"></div>
+    </map-info-window>
+</google-map>
+
+   
+  <!-- Use custom zoom buttons
+  <div class="mt-3">
+    <button pButton pRipple label="Zoom In" icon="pi pi-plus" class="p-button-primary mr-5" (click)="zoomIn()"></button>
+  <button pButton pRipple label="Zoom Out" icon="pi pi-minus" class="p-button-success" (click)="zoomOut()"></button>
+  </div>
+   -->
+  <div  *ngIf="isData" class="col-12">
+      <div class="card">
+         <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+      </div>
+  </div>
+ 
+</div>

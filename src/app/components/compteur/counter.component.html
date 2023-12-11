@@ -1,0 +1,83 @@
+<div  class="font-bold" styleClass="font-size: 20px">
+    <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+        'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+
+
+<div class="grid">
+	<div class="col-12">
+
+            <p-panel header="{{ pageTitle }}">
+                
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="refCompteur" class="font-bold">Référence du Compteur : </label>
+                        <input type="text" pInputText id="refCompteur"   [(ngModel)]="compteur.refCompteur" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !compteur.refCompteur}"/>
+                        <small style="color:red;" *ngIf="submitted && !compteur.refCompteur">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="refContrat" class="font-bold">Référence du contrat : </label>
+                        <input type="text" pInputText id="refContrat" [(ngModel)]="compteur.refContrat" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !compteur.refContrat}"/>
+                        <small style="color:red;" *ngIf="submitted && !compteur.refContrat">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="local" class="font-bold">Local :  </label>
+                        <p-dropdown [options]="locaux"  [(ngModel)]="local" optionLabel="designation" (onChange)="onChangeLocal(local)" [showClear]="true" [filter]="true" filterBy="designation" 
+                        appendTo="body" placeholder="Choisissez le local" id="local" [ngClass]="{'ng-invalid ng-dirty' : submitted && !local}">
+                            <ng-template let-local pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                    <div>{{ local.code}} {{local.designation }}</div>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        <small style="color:red;" *ngIf="submitted && !local">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="maxConsommation" class="font-bold">Max consommation : </label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="1" id="maxConsommation"[(ngModel)]="compteur.maxConsommation"  required [ngClass]="{'ng-invalid ng-dirty' : submitted && !compteur.maxConsommation}">
+                        </p-inputNumber>
+                        <small style="color:red;" *ngIf="submitted && !compteur.maxConsommation">Ce champs est requis.</small>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="dateValue" class="font-bold">Date Installation : </label>
+                        <p-calendar  [style]="inputStyle" dateFormat="dd-mm-yy" id="dateValue" [maxDate]="maxDate"   [(ngModel)]="dateValue" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !dateValue}"></p-calendar>
+                        <small style="color:red;" *ngIf="submitted && !dateValue">Ce champs est requis.</small>
+                    </div>
+                   <!-- <div class="field col-12 md:col-6">
+                        <label htmlFor="image" class="font-bold">Image : </label>
+                        <input type="text" pInputText id="image"  [(ngModel)]="compteur.image" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !compteur.image}"/>
+                        <small  style="color:red;" *ngIf="submitted && !compteur.image">Ce champs est requis.</small>
+                    </div> -->
+                    <div class="field col-12 md:col-6">
+                        <label for="etat" class="font-bold">Etat :  </label>
+                        <div class="grid formgrid"> 
+                           
+                            <div class="col-12 md:col-4">
+                                <div class="field-radiobutton">
+                                    <p-radioButton name="etatCompteur" [value]="true" [(ngModel)]="etat" id="actif"></p-radioButton>
+                                    <label for="actif">Actif</label>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <div class="field-radiobutton">
+                                    <p-radioButton name="etatCompteur" [value]="false" [(ngModel)]="etat" id="inactif"></p-radioButton>
+                                    <label for="inactif">Inactif</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field col-12 flex justify-content-center ">
+                        <button pButton pRipple label="Enregistrer" icon="pi pi-save" style="border-radius: 25px; width: 200px;" severity="primary" (click)="save()"></button>
+                    </div>
+                    
+                </div>
+                
+            </p-panel>
+                    
+            
+			
+			
+
+	</div>
+</div>

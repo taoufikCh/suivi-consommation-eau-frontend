@@ -1,0 +1,82 @@
+<div class="loading-indicator" *ngIf="loading">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<div  class="font-bold" styleClass="font-size: 20px">
+    <p-breadcrumb  class="font-bold" [style]="{'color': '#000','font-style': 'normal','font-family': 'ui-serif',
+        'font-size': 'large', 'background-color': 'rgb(243 243 243)' }" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <p-panel header="Statistique des consommations d'eau">
+            
+        <div class="px-1 py-1">
+            
+            <p-toolbar styleClass="mb-2 ml-1 mp-1 mr-1">
+                
+                <div class="field col-12 md:col-3 grid">
+                    <label for="district" class="font-bold">District :  </label>
+                    <p-dropdown [options]="districts"  [(ngModel)]="district" optionLabel="libille" [filter]="true"
+                    (onChange)="onChangeDistrict(district)" filterBy="libille" appendTo="body" [showClear]="true" placeholder="Choisissez un district">
+                        <ng-template let-district pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ district.libille }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                
+                <div class="field col-12 md:col-3 grid">
+                    <label for="region" class="font-bold">Région :  </label>
+                    <p-dropdown [options]="regions"  [(ngModel)]="region" optionLabel="libille"  [showClear]="true" [filter]="true" filterBy="libille" appendTo="body" placeholder="Choisissez une région" >
+                        <ng-template let-region pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ region.libille }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-3 grid">
+                    
+                    <label htmlFor="dateDebut" class="font-bold">Période de : </label>
+                    <p-calendar dateFormat="yy-mm-dd" id="dateDebut" [maxDate]="maxDate"   [(ngModel)]="dateDebut"></p-calendar>
+                </div>
+                <div class="field col-12 md:col-2 grid">
+                    <label htmlFor="dateFin" class="font-bold">à : </label>
+                    <p-calendar dateFormat="yy-mm-dd" id="dateFin" [(ngModel)]="dateFin" ></p-calendar>
+                    
+                </div>
+               
+
+                <ng-template pTemplate="right" >
+                   <div style="float: right;">
+                    <button pButton pRipple label="Aperçu " icon="pi pi-eye" class="p-button-primary  mr-3" (click)="generateStatistic()" [disabled]="!region" ></button>
+                    <button pButton pRipple label="Réinitialiser " icon="pi pi-replay" class="p-button-danger  mr-3" (click)="resetFilter()" ></button>
+                   </div> 
+                </ng-template>
+            </p-toolbar>
+            <div *ngIf="isData">
+                <div class="grid flex justify-content-center">
+                    <div class="col-12 xl:col-9">
+                        <div class="card">
+                                <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+                        </div>
+                    </div>
+                    <div class="col-6 xl:col-4">
+                        <div class="card flex justify-content-center">
+                            
+                            <p-chart type="doughnut" [data]="doughnutData" [options]="doughnutOptions"></p-chart>
+                        </div>
+                    </div>
+                    <div class="col-6 xl:col-4">
+                        <div class="card flex ">
+                            <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+                        </div>
+                    </div>
+                  
+                   
+                </div>
+           </div>
+        </div>
+    </p-panel>
+    </div>
+</div>
