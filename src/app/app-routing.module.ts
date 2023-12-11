@@ -41,8 +41,6 @@ const routes: Routes = [
     path: '', component: AppLayoutComponent,canActivate: [AuthGuard],
     children: [
       { path: '', loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [AutorizationGuard] },
-      { path: 'pages', loadChildren: () => import('./components/pages/pages.module').then(m => m.PagesModule) },
-      { path: 'schools', loadChildren: () => import('./components/schools/schools.module').then(m => m.SchoolsModule), canActivate: [AutorizationGuard] },
       { path: 'districts', loadChildren: () => import('./components/districts/districts.module').then(m => m.DistrictsModule), canActivate: [AutorizationGuard] },
       { path: 'regions', loadChildren: () => import('./components/regions/regions.module').then(m => m.RegionsModule), canActivate: [AutorizationGuard] },
       { path: 'natureExercices', loadChildren: () => import('./components/nature_exercices/natureExercices.module').then(m => m.NatureExercisesModule), canActivate: [AutorizationGuard] },
